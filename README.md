@@ -51,6 +51,40 @@ cargo build --release
 
 This produces the binary at `target/release/whidle`.
 
+## Systemd integration
+
+A basic systemd unit file is provided. It assumes that you've copied
+the `whidle` binary to `/usr/local/bin`. Adjust the path in the unit
+file if needed.
+
+You can install and enable the unit like so:
+
+```
+systemctl --user link $PWD/whidle.service
+systemctl --user enable whidle.service --now
+```
+
+## Home Assistant integration
+
+Adapt the following section and add it to Home Assistant `configuration.yaml`.
+If you already have a `sensors:` section, just merge the entry below into it.
+The example below is using a `.local` hostname, but of course if you haven't
+configured that you can put the machine's IP address.
+
+```yaml
+sensors:
+- platform: rest
+  name: "My Wayland idle time on my machine"
+  resource: http://mymachine.local:2323/
+  value_template: "{{ value_json.idleseconds }}"
+  device_class: duration
+  unit_of_measurement: seconds
+```
+
+After editing `configuration.yaml` you need to restart Home Assistant.
+Then you should see that sensor appear and can configure regular automations
+with it.
+
 ## AI disclosure
 
 The code was generated in a single session with Claude Code. This is what `/usage` says:
