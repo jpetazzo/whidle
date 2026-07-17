@@ -1,0 +1,9 @@
+[package]
+name = "whidle"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+wayrs-client = "1"
+wayrs-protocols = { version = "0.14", features = ["ext-idle-notify-v1"] }
+tiny_http = "0.12"
